@@ -13,6 +13,8 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        principal.cpp
+        principal.cpp \
+    tabuleiro.cpp
 
-HEADERS  += principal.h
+HEADERS  += principal.h \
+    tabuleiro.h

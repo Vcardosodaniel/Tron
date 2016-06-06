@@ -2,6 +2,7 @@
 #define PRINCIPAL_H
 
 #include <QtWidgets>
+#include "tabuleiro.h"
 
 class Principal : public QWidget
 {
@@ -10,6 +11,11 @@ class Principal : public QWidget
 public:
     Principal(QWidget *parent = 0);
     ~Principal();
+
+private:
+    Tabuleiro* tabuleiro;
+    QLabel* teste;
+    QVBoxLayout* layoutPrincipal;
 };
 
 #endif // PRINCIPAL_H
