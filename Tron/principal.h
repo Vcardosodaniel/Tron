@@ -1,7 +1,7 @@
 #ifndef PRINCIPAL_H
 #define PRINCIPAL_H
 
-#include <QWidget>
+#include <QtWidgets>
 
 class Principal : public QWidget
 {
