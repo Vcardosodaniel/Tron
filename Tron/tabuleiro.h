@@ -7,12 +7,13 @@ class Tabuleiro : public QFrame
 {
     Q_OBJECT
 public:
-    explicit Tabuleiro(QWidget *parent = 0);
-    void paintEvent(QKeyEvent* event);
+    explicit Tabuleiro(QFrame *parent = 0);
+    void paintEvent(QPaintEvent* event);
 
 signals:
 
 public slots:
+    void _tick();
 };
 
 #endif // TABULEIRO_H
