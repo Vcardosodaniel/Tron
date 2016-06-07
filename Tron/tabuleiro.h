@@ -2,6 +2,7 @@
 #define TABULEIRO_H
 
 #include <QtWidgets>
+#include "player.h"
 
 class Tabuleiro : public QFrame
 {
@@ -10,9 +11,15 @@ public:
     explicit Tabuleiro(QFrame *parent = 0);
     void paintEvent(QPaintEvent* event);
 
-signals:
+private:
+    Player* _yellow_player;
+    qint64 _last_time_60fps;
+    qint64 _accumulator60;
+    int _max_fps;
+    int _counter;
+    float _constant_dt;
 
-public slots:
+private slots:
     void _tick();
 };
 

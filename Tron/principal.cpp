@@ -1,4 +1,5 @@
 #include "principal.h"
+#include <QDebug>
 
 Principal::Principal(QWidget *parent)
     : QWidget(parent)
@@ -9,6 +10,8 @@ Principal::Principal(QWidget *parent)
 
     layoutPrincipal ->addWidget(teste);
     layoutPrincipal ->addWidget(tabuleiro);
+
+    setLayout(layoutPrincipal);
 
 }
 

@@ -16,6 +16,7 @@ private:
     Tabuleiro* tabuleiro;
     QLabel* teste;
     QVBoxLayout* layoutPrincipal;
+
 };
 
 #endif // PRINCIPAL_H

@@ -14,7 +14,9 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         principal.cpp \
-    tabuleiro.cpp
+    tabuleiro.cpp \
+    player.cpp
 
 HEADERS  += principal.h \
-    tabuleiro.h
+    tabuleiro.h \
+    player.h
