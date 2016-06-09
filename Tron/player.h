@@ -3,19 +3,24 @@
 
 #include <QtWidgets>
 
-class Player : public QFrame
+class Player
 {
-    Q_OBJECT
 public:
-    explicit Player(QFrame *parent = 0, const QColor color = Qt::black);
-    void paintEvent(QPaintEvent* event);
-    void draw();
+    Player(QSize arena_size);
 
+    void move(qint64 dt);
+    void draw(QPainter* painter);
 
-    QColor _color;
-    int _sq_sz;
-    int _x, _y;
-    int _dx, _dy;
+    void setArenaSize(QSize arena_size);
+    void setSpeed(QVector2D speed);
+
+    void reset();
+    QPoint position();
+
+private:
+    QSize _arena_sz;
+    QPoint _pos;
+    QVector2D _speed;
 };
 
 #endif // PLAYER_H

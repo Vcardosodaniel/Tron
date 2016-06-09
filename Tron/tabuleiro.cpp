@@ -9,8 +9,6 @@ Tabuleiro::Tabuleiro(QFrame* parent) : QFrame(parent){
     _constant_dt = 1000 / _max_fps;
     _last_time_60fps = QDateTime::currentMSecsSinceEpoch();
 
-    _yellow_player = new Player((QFrame*)this, Qt::yellow);
-
     // Start timer
     QTimer::singleShot(1000/_max_fps, this, SLOT(_tick()));
 }
@@ -28,6 +26,8 @@ void Tabuleiro::paintEvent(QPaintEvent* event){
     painter.setPen(Qt::black);
     painter.drawRect(0, 0, width()-1, height()-1);
 
+    _yellow_player->draw(&painter);
+
 }
 
 void Tabuleiro::_tick()
@@ -42,8 +42,6 @@ void Tabuleiro::_tick()
             _accumulator60 -= _constant_dt;
         }
 
-        _yellow_player->draw();
-        qDebug()<<_yellow_player->_x;
         _last_time_60fps = now;
     }
 
