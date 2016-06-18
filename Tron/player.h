@@ -6,21 +6,24 @@
 class Player
 {
 public:
-    Player(QSize arena_size);
+    Player(QSize arena_size, char direction);
 
     void move(qint64 dt);
     void draw(QPainter* painter);
 
     void setArenaSize(QSize arena_size);
     void setSpeed(QVector2D speed);
+    void reset(QPoint initial_pos);
 
-    void reset();
     QPoint position();
+    QSize size();
 
 private:
     QSize _arena_sz;
     QPoint _pos;
     QVector2D _speed;
+    float _dx, _dy;
+    int _x, _y;
 };
 
 #endif // PLAYER_H

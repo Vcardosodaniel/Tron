@@ -15,8 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         principal.cpp \
     tabuleiro.cpp \
-    player.cpp
+    player.cpp \
+    squad.cpp
 
 HEADERS  += principal.h \
     tabuleiro.h \
-    player.h
+    player.h \
+    squad.h
+
+RESOURCES += \
+    gameimages.qrc
