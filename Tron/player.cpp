@@ -2,18 +2,15 @@
 
 Player::Player(QSize arena_size, char direction){
     _arena_sz = arena_size;
-    _pos.setX(600);
-    _pos.setY(300);
 
      _speed.setX(0);
      _speed.setY(0);
 
-     _x = _pos.x();
-     _y = _pos.y();
-
 }
 
 void Player::move(qint64 dt){
+    _x = _pos.x();
+    _y = _pos.y();
 
     _pos.setX(dt);
 
@@ -47,7 +44,7 @@ void Player::move(qint64 dt){
 void Player::draw(QPainter* painter){
     QRect playerTron(_pos.x() ,_pos.y(), 15, 15);
 
-    painter->drawRoundedRect(playerTron, 10.0, 10.0);
+    painter->drawRoundedRect(playerTron, 1.0, 1.0);
 }
 
 void Player::setArenaSize(QSize arena_size){

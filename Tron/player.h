@@ -15,12 +15,12 @@ public:
     void setSpeed(QVector2D speed);
     void reset(QPoint initial_pos);
 
-    QPoint position();
+    QPoint position;
     QSize size();
+    QPoint _pos;
 
 private:
     QSize _arena_sz;
-    QPoint _pos;
     QVector2D _speed;
     float _dx, _dy;
     int _x, _y;

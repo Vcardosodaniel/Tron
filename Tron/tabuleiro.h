@@ -13,22 +13,26 @@ public:
     void paintEvent(QPaintEvent* event);
     void keyPressEvent(QKeyEvent* event);
     void draw();
-    bool colisaoP1();
+    void colisaoYellowPlayer();
+    void colisaoGreenPlayer();
+    void startGame();
 
 private:
-    Player* _yellow_player;
+    Player* _yellow_player, *_green_player;
     qint64 _last_time_60fps;
     qint64 _accumulator60;
     qint64 movePlayer;
+    QVector<QPoint> caminho;
     int _max_fps, _x, _y;
     int _counter;
-    float _constant_dt, deslocamentoXP1, deslocamentoYP1;
+    float _constant_dt, deslocamentoXP1, deslocamentoYP1, deslocamentoXP2, deslocamentoYP2;
     QSize* tamanhoTabuleiro;
     bool mostrarMenu;
     char direction;
-    Squad* _squad[40][54];
-    int _corXY[40][54];
-    bool esquerda, direita, cima, baixo;
+    Squad* _squad[40][53];
+    int _corXY[40][53];
+    bool esquerda, direita, cima, baixo, fps;
+    bool esquerda2, direita2, cima2, baixo2;
 
 private slots:
     void _tick();

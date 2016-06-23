@@ -15,7 +15,7 @@ void Squad::draw(int x, int y, QPainter &painter, const QBrush &brush){
     _pos_x = x;
     _pos_y = y;
 
-    painter.fillRect(x, y, 50, 50, brush);
+    painter.fillRect(x, y, 13, 13, brush);
 }
 
 int Squad::x(){
@@ -27,16 +27,16 @@ int Squad::y(){
 }
 
 int Squad::w(){
-    return (50);
+    return (10);
 }
 
 int Squad::h(){
-    return (50);
+    return (10);
 }
 
 QPainterPath Squad::shape() const
 {
     QPainterPath path;
-    path.addRect(_pos_x, _pos_y, 50, 50);
+    path.addRect(_pos_x, _pos_y, 15, 15);
     return path;
 }
