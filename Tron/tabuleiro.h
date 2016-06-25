@@ -15,6 +15,8 @@ public:
     void draw();
     void colisaoYellowPlayer();
     void colisaoGreenPlayer();
+    void moveP1();
+    void moveP2();
     void startGame();
 
 private:
@@ -22,7 +24,8 @@ private:
     qint64 _last_time_60fps;
     qint64 _accumulator60;
     qint64 movePlayer;
-    QVector<QPoint> caminho;
+    QVector<QPoint> caminhoP1;
+    QVector<QPoint> caminhoP2;
     int _max_fps, _x, _y;
     int _counter;
     float _constant_dt, deslocamentoXP1, deslocamentoYP1, deslocamentoXP2, deslocamentoYP2;

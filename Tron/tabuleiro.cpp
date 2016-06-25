@@ -33,8 +33,11 @@ void Tabuleiro::startGame(){
     deslocamentoYP1 = 2;
     deslocamentoXP2 = 2;
     deslocamentoYP2 = 2;
-    esquerda = direita = cima = baixo = false;
-    esquerda2 = direita2 = cima2 = baixo2 = false;
+    caminhoP1.clear();
+    caminhoP2.clear();
+    esquerda = direita2 =  true;
+    direita = cima = baixo = false;
+    esquerda2 = cima2 = baixo2 = false;
     fps = true;
 
     for(int linha=0; linha<40; linha++){
@@ -53,7 +56,11 @@ void Tabuleiro::startGame(){
     _yellow_player->position.setX(_yellow_player->_pos.x()+7);
     _yellow_player->_pos.setY(448);
     _yellow_player->position.setY(_yellow_player->_pos.y()+7);
+
+    caminhoP1.push_back(_yellow_player->_pos);
+    caminhoP2.push_back(_green_player->_pos);
 }
+
 
 
 void Tabuleiro::paintEvent(QPaintEvent* event){
@@ -66,6 +73,8 @@ void Tabuleiro::paintEvent(QPaintEvent* event){
     painter.setPen(Qt::black);
     painter.fillRect(0, 0, width(), height(), Qt::darkBlue);
     painter.drawRect(0,0,width(),height());
+    QPen *caneta = new QPen();
+    caneta->setWidth(7);
 
     _yellow_player->setArenaSize(this->size());
     _green_player->setArenaSize(this->size());
@@ -85,17 +94,25 @@ void Tabuleiro::paintEvent(QPaintEvent* event){
         _green_player->move(_constant_dt);
 
         if(fps){
-            QString _fps = QString::number(_max_fps);
+            QString _fps = QString::number(_accumulator60);
             painter.setPen(Qt::white);
             painter.drawText(400,10,40,20,1,_fps);
         }
 
-        painter.setPen(Qt::green);
-        painter.drawLine(caminho->x(),caminho->y(), _green_player->_pos.x()+7,_green_player->_pos.y()+7);
+        caneta->setColor(Qt::yellow);
+
+        painter.setPen(*caneta);
+        QPolygon* yellowWay = new QPolygon(caminhoP1);
+        painter.drawPolyline(*yellowWay);
+        painter.drawLine(caminhoP1.last().x()+7, caminhoP1.last().y()+7, _yellow_player->_pos.x()+7, _yellow_player->_pos.y()+7);
 
 
-        painter.setPen(Qt::yellow);
-        painter.drawLine(_yellow_player->position.x(),_yellow_player->position.y(),_yellow_player->_pos.x()+7, _yellow_player->_pos.y()+7);
+        caneta->setColor(Qt::green);
+        painter.setPen(*caneta);
+        QPolygon* greenWay = new QPolygon(caminhoP2);
+        painter.drawPolyline(*greenWay);
+        painter.drawLine(caminhoP2.last(), _green_player->_pos);
+//        painter.drawLine(_yellow_player->position.x(),_yellow_player->position.y(),_yellow_player->_pos.x()+7, _yellow_player->_pos.y()+7);
 
 //        for(int linha=0; linha<40; linha++){
 //            for(int coluna=0; coluna<53; coluna++){
@@ -137,7 +154,9 @@ void Tabuleiro::_tick()
     }
 
     colisaoYellowPlayer();
+    moveP1();
     colisaoGreenPlayer();
+    moveP2();
 
     _counter++;
     _counter = _counter % 60; // Ranges from 0 to 59
@@ -178,119 +197,137 @@ void Tabuleiro::keyPressEvent(QKeyEvent* event){
         deslocamentoYP1 ++;
     }
 
-    if(keypress == Qt::Key_I && cima == false){
+    if(keypress == Qt::Key_I){
         cima = true;
+        baixo = false;
+        esquerda = false;
+        direita = false;
+    }
+    if(keypress == Qt::Key_K){
+        baixo = true;
+        cima = false;
+        esquerda = false;
+        direita = false;
+    }
+    if(keypress == Qt::Key_J){
+        esquerda = true;
+        direita = false;
+        cima = false;
+        baixo = false;
+    }
+    if(keypress == Qt::Key_L){
+        direita = true;
+        esquerda = false;
+        cima = false;
+        baixo = false;
+    }
+
+
+    if(keypress == Qt::Key_W){
+        cima2 = true;
+        baixo2 = false;
+        esquerda2 = false;
+        direita2 = false;
+    }
+    if(keypress == Qt::Key_S){
+        baixo2 = true;
+        cima2 = false;
+        esquerda2 = false;
+        direita2 = false;
+    }
+    if(keypress == Qt::Key_A){
+        esquerda2 = true;
+        direita2 = false;
+        cima2 = false;
+        baixo2 = false;
+    }
+    if(keypress == Qt::Key_D){
+        direita2 = true;
+        esquerda2 = false;
+        cima2 = false;
+        baixo2 = false;
+    }
+}
+
+void Tabuleiro::moveP1(){
+    if(cima == true){
         deslocamentoYP1 = -2 ;
         _yellow_player->setSpeed(QVector2D(0,deslocamentoYP1));
-        baixo = false;
-        esquerda = false;
-        direita = false;
-        _yellow_player->position.setX(_yellow_player->_pos.x()+7);
-        _yellow_player->position.setY(_yellow_player->_pos.y()+7);
+        caminhoP1.push_back(_yellow_player->_pos);
     }
-    if(keypress == Qt::Key_K && baixo == false){
-        baixo = true;
+    if(baixo == true){
         deslocamentoYP1 = 2;
         _yellow_player->setSpeed(QVector2D(0,deslocamentoYP1));
-        cima = false;
-        esquerda = false;
-        direita = false;
-        _yellow_player->position.setX(_yellow_player->_pos.x()+7);
-        _yellow_player->position.setY(_yellow_player->_pos.y()+7);
+        caminhoP1.push_back(_yellow_player->_pos);
     }
-    if(keypress == Qt::Key_J && esquerda == false){
-        esquerda = true;
+    if(esquerda == true){
         deslocamentoXP1 = -2 ;
         _yellow_player->setSpeed(QVector2D(deslocamentoXP1,0));
-        direita = false;
-        cima = false;
-        baixo = false;
-        _yellow_player->position.setX(_yellow_player->_pos.x()+7);
-        _yellow_player->position.setY(_yellow_player->_pos.y()+7);
+        caminhoP1.push_back(_yellow_player->_pos);
     }
-    if(keypress == Qt::Key_L && direita == false){
-        direita = true;
+    if(direita == true){
         deslocamentoXP1 = 2;
         _yellow_player->setSpeed(QVector2D(deslocamentoXP1,0));
-        esquerda = false;
-        cima = false;
-        baixo = false;
-        _yellow_player->position.setX(_yellow_player->_pos.x()+7);
-        _yellow_player->position.setY(_yellow_player->_pos.y()+7);
-    }
+        caminhoP1.push_back(_yellow_player->_pos);
+        }
+}
 
-
-    if(keypress == Qt::Key_W && cima2 == false){
-        cima2 = true;
+void Tabuleiro::moveP2(){
+    if(cima2 == true){
         deslocamentoYP2 = -2 ;
         _green_player->setSpeed(QVector2D(0,deslocamentoYP2));
-        baixo2 = false;
-        esquerda2 = false;
-        direita2 = false;
-        _green_player->position.setX(_green_player->_pos.x()+7);
-        _green_player->position.setY(_green_player->_pos.y()+7);
+        caminhoP2.push_back(_green_player->_pos);
     }
-    if(keypress == Qt::Key_S && baixo2 == false){
-        baixo2 = true;
+    if(baixo2 == true){
         deslocamentoYP2 = 2;
         _green_player->setSpeed(QVector2D(0,deslocamentoYP2));
-        cima2 = false;
-        esquerda2 = false;
-        direita2 = false;
-        _green_player->position.setX(_green_player->_pos.x()+7);
-        _green_player->position.setY(_green_player->_pos.y()+7);
+        caminhoP2.push_back(_green_player->_pos);
     }
-    if(keypress == Qt::Key_A && esquerda2 == false){
-        esquerda2 = true;
+    if(esquerda2 == true){
         deslocamentoXP2 = -2 ;
         _green_player->setSpeed(QVector2D(deslocamentoXP2,0));
-        direita2 = false;
-        cima2 = false;
-        baixo2 = false;
-        _green_player->position.setX(_green_player->_pos.x()+7);
-        _green_player->position.setY(_green_player->_pos.y()+7);
+        caminhoP2.push_back(_green_player->_pos);
     }
-    if(keypress == Qt::Key_D && direita2 == false){
-        direita2 = true;
+    if(direita2 == true){
         deslocamentoXP2 = 2;
         _green_player->setSpeed(QVector2D(deslocamentoXP2,0));
-        esquerda2 = false;
-        cima2 = false;
-        baixo2 = false;
-        _green_player->position.setX(_green_player->_pos.x()+7);
-        _green_player->position.setY(_green_player->_pos.y()+7);
+        caminhoP2.push_back(_green_player->_pos);
     }
-
 }
 
 void  Tabuleiro::colisaoYellowPlayer(){
 
-    for(int linha = 0; linha < 40; linha++){
-        for(int coluna = 0; coluna < 53; coluna++){
-            if(_corXY[linha][coluna] == 0){
-                if((_yellow_player->_pos.x() + 15 >= _squad[linha][coluna]->x()) && (_yellow_player->_pos.x() <= _squad[linha][coluna]->x() + _squad[linha][coluna]->w()) &&
-                   (_yellow_player->_pos.y() + 15 >= _squad[linha][coluna]->y()) && (_yellow_player->_pos.y() <= _squad[linha][coluna]->y() + _squad[linha][coluna]->h())){
-                    _corXY[linha][coluna] = 1;
-                }
-            }else {
+//    for(int linha = 0; linha < 40; linha++){
+//        for(int coluna = 0; coluna < 53; coluna++){
+//            if(_corXY[linha][coluna] == 0){
+//                if((_yellow_player->_pos.x() + 15 >= _squad[linha][coluna]->x()) && (_yellow_player->_pos.x() <= _squad[linha][coluna]->x() + _squad[linha][coluna]->w()) &&
+//                   (_yellow_player->_pos.y() + 15 >= _squad[linha][coluna]->y()) && (_yellow_player->_pos.y() <= _squad[linha][coluna]->y() + _squad[linha][coluna]->h())){
+//                    _corXY[linha][coluna] = 1;
+//                }
+//            }else {
 //               qDebug() << "bati";
-            }
-        }
+//            }
+//        }
+//    }
+
+        if( caminhoP1.contains(_yellow_player->_pos) ){
+            qDebug() << "batiiiiiii";
+
     }
 }
 
 void Tabuleiro::colisaoGreenPlayer(){
 
-    for(int linha = 0; linha < 40; linha++){
-        for(int coluna = 0; coluna < 53; coluna++){
-            if(_corXY[linha][coluna] == 0){
-                if((_green_player->_pos.x() + 15 >= _squad[linha][coluna]->x()) && (_green_player->_pos.x() <= _squad[linha][coluna]->x() + _squad[linha][coluna]->w()) &&
-                   (_green_player->_pos.y() + 15 >= _squad[linha][coluna]->y()) && (_green_player->_pos.y() <= _squad[linha][coluna]->y() + _squad[linha][coluna]->h())){
-                    _corXY[linha][coluna] = -1;
-                }
-            }else {
+//    for(int linha = 0; linha < 40; linha++){
+//        for(int coluna = 0; coluna < 53; coluna++){
+//            if(_corXY[linha][coluna] == 0){
+//                if((_green_player->_pos.x() + 15 >= _squad[linha][coluna]->x()) && (_green_player->_pos.x() <= _squad[linha][coluna]->x() + _squad[linha][coluna]->w()) &&
+//                   (_green_player->_pos.y() + 15 >= _squad[linha][coluna]->y()) && (_green_player->_pos.y() <= _squad[linha][coluna]->y() + _squad[linha][coluna]->h())){
+//                    _corXY[linha][coluna] = -1;
+//                }
+//            }else {
 //               qDebug() << "bati";
-            }
-        }
-    }
+//            }
+//        }
+//    }
 }
